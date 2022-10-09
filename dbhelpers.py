@@ -93,3 +93,18 @@ def the_closer(cursor):
         print("data Error: ", error)
     except Exception as error:
         print("unexpected error: ", error)
+
+def run_statement(statement, list_of_args=[]):
+    cursor = just_connect()
+    if(cursor == None):
+        return "Connection Error"
+    result = cursor_result(cursor, statement, list_of_args)
+    if(type(result) == list):
+        the_closer(cursor)
+        return result
+    elif(result == "Connection Error"):
+        return "Connection error"
+    elif(result == None):
+        return "Statement Error"
+    the_closer(cursor)
+    return result
