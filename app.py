@@ -89,6 +89,22 @@ def search_employee_by_id():
     else:
         return make_response(json.dumps(result, default=str), 400)
 
+@app.post('/api/employee')
+def new_employee():
+    name = request.json.get('name')
+    position = request.json.get('position')
+    wage = request.json.get('wage')
+    valid_check = a.check_endpoint_info(request.json, ['name', 'position', 'wage'])
+    if(type(valid_check) == str):
+        return valid_check
+    result = dh.run_statement('CALL add_employee(?,?,?)', [name, position, wage])
+    if(type(result) == list):
+        return make_response(json.dumps(result, default=str), 200)
+       
+    else:
+        return make_response(json.dumps(result, default=str), 400)
+
+
 
 
 
