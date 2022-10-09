@@ -68,10 +68,11 @@ def remove_item():
         return valid_check
     result = dh.run_statement('CALL delete_inventory_item(?)', [item_id])
     if(type(result) == list):
-
+        print("success")
         return make_response(json.dumps(result, default=str), 200)
 
     else:
+        print("failed")
         return make_response(json.dumps(result, default=str), 400)
 
 
@@ -118,6 +119,23 @@ def update_wage():
         return make_response(json.dumps(result, default=str), 200)
        
     else:
+        return make_response(json.dumps(result, default=str), 400)
+
+
+#removing employee from db
+@app.delete('/api/employee')
+def employee_poof():
+    id = request.json.get('id')
+    valid_check = a.check_endpoint_info(request.json, ['id'])
+    if(type(valid_check) == str):
+        return valid_check
+    result = dh.run_statement('CALL eject_employee(?)', [id])
+    if(type(result) == list):
+        print("success")
+        return make_response(json.dumps(result, default=str), 200)
+       
+    else:
+        print("failed")
         return make_response(json.dumps(result, default=str), 400)
 
 
