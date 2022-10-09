@@ -89,6 +89,7 @@ def search_employee_by_id():
     else:
         return make_response(json.dumps(result, default=str), 400)
 
+# adds an new employee to db, need name, position and wage.  it returns the id 
 @app.post('/api/employee')
 def new_employee():
     name = request.json.get('name')
@@ -104,7 +105,20 @@ def new_employee():
     else:
         return make_response(json.dumps(result, default=str), 400)
 
-
+# update wage, need id, and new wage
+@app.patch('/api/employee')
+def update_wage():
+    id = request.json.get('id')
+    wage = request.json.get('wage')
+    valid_check = a.check_endpoint_info(request.json, ['id', 'wage'])
+    if(type(valid_check) == str):
+        return valid_check
+    result = dh.run_statement('CALL update_wages_by_id(?,?)', [id, wage])
+    if(type(result) == list):
+        return make_response(json.dumps(result, default=str), 200)
+       
+    else:
+        return make_response(json.dumps(result, default=str), 400)
 
 
 
